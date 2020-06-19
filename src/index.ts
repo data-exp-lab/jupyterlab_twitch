@@ -5,7 +5,10 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  ICommandPalette, MainAreaWidget, WidgetTracker
+  ICommandPalette,
+  MainAreaWidget,
+  WidgetTracker,
+  InputDialog
 } from '@jupyterlab/apputils';
 
 import { Widget } from '@lumino/widgets';
@@ -16,8 +19,9 @@ import * as Twitch from './twitch-embed.js';
 //const Twitch = await import('https://embed.twitch.tv/embed/v1.js');
 
 class TwitchWidget extends Widget {
-  constructor() {
+  constructor(initialChannel: string) {
     super();
+    this.channel = initialChannel;
     this.addClass('twitch-widget');
 
     this.div = document.createElement('div');
@@ -25,13 +29,14 @@ class TwitchWidget extends Widget {
     this.node.appendChild(this.div);
   }
 
-  render(): void {
+  onUpdateRequest(): void {
     if (!this.embed) {
       const params: Twitch.TwitchEmbedParameters = {
         allowfullscreen: false,
-        channel: 'mst3k',
-        height: 512,
-        width: 512
+        channel: this.channel,
+        height: '100%',
+        width: '100%',
+        layout: 'video-with-chat'
       };
 
       this.embed = new Twitch.Embed('twitch-embed', params);
@@ -39,6 +44,7 @@ class TwitchWidget extends Widget {
   }
 
   embed: Twitch.Embed;
+  channel: string;
   readonly player: Twitch.Player;
   readonly div: HTMLDivElement;
 }
@@ -50,7 +56,7 @@ const extension: JupyterFrontEndPlugin<void> = {
   id: 'jupyterlab_twitch',
   requires: [ICommandPalette, ILayoutRestorer],
   autoStart: true,
-  activate: (
+  activate: async (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
     restorer: ILayoutRestorer
@@ -63,12 +69,19 @@ const extension: JupyterFrontEndPlugin<void> = {
 
     app.commands.addCommand(command, {
       label: 'Twitch',
-      execute: () => {
+      execute: async () => {
         if (!widget) {
-          const content = new TwitchWidget();
+          const result = await InputDialog.getText({
+            title: 'Channel',
+            text: 'mst3k'
+          });
+          if (!result.button.accept) {
+            return;
+          }
+          const content = new TwitchWidget(result.value);
           widget = new MainAreaWidget({ content });
           widget.id = 'twitch-jupyterlab';
-          widget.title.label = 'Twitch Stream';
+          widget.title.label = 'Twitch: #' + content.channel;
           widget.title.closable = true;
         }
         if (!tracker.has(widget)) {
@@ -76,7 +89,6 @@ const extension: JupyterFrontEndPlugin<void> = {
         }
         if (!widget.isAttached) {
           app.shell.add(widget, 'main');
-          widget.content.render();
         }
         widget.content.update();
 
@@ -84,7 +96,7 @@ const extension: JupyterFrontEndPlugin<void> = {
       }
     });
 
-    palette.addItem({ command, category: 'Tutorial' });
+    palette.addItem({ command, category: 'Twitch' });
 
     const tracker = new WidgetTracker<MainAreaWidget<TwitchWidget>>({
       namespace: 'twitch'
