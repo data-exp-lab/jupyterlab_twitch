@@ -9,7 +9,6 @@ import {
 import {
   ICommandPalette,
   MainAreaWidget,
-  WidgetTracker,
   InputDialog
 } from '@jupyterlab/apputils';
 
@@ -26,7 +25,6 @@ const extension: JupyterFrontEndPlugin<void> = {
   activate: async (
     app: JupyterFrontEnd,
     palette: ICommandPalette,
-    restorer: ILayoutRestorer,
     registry: IJupyterWidgetRegistry
   ) => {
     console.log('JupyterLab extension jupyterlab-twitch is activated!');
@@ -56,9 +54,6 @@ const extension: JupyterFrontEndPlugin<void> = {
           widget.title.label = 'Twitch: #' + content.channel;
           widget.title.closable = true;
         }
-        if (!tracker.has(widget)) {
-          tracker.add(widget);
-        }
         if (!widget.isAttached) {
           app.shell.add(widget, 'main');
         }
@@ -69,14 +64,6 @@ const extension: JupyterFrontEndPlugin<void> = {
     });
 
     palette.addItem({ command, category: 'Twitch' });
-
-    const tracker = new WidgetTracker<MainAreaWidget<TwitchPlayerWidget>>({
-      namespace: 'twitch'
-    });
-    restorer.restore(tracker, {
-      command,
-      name: () => 'twitch'
-    });
   }
 };
 
