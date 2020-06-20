@@ -10,6 +10,7 @@ declare global {
     interface Window {
         Player: Player;
         Embed: Embed;
+        embedded: Embed;
     }
 }
 

@@ -43,6 +43,10 @@ class TwitchWidget extends Widget {
     }
   }
 
+  onCloseRequest(): void {
+    delete this.embed;
+  }
+
   embed: Twitch.Embed;
   channel: string;
   readonly player: Twitch.Player;
@@ -63,13 +67,12 @@ const extension: JupyterFrontEndPlugin<void> = {
   ) => {
     console.log('JupyterLab extension jupyterlab-twitch is activated!');
 
-    let widget: MainAreaWidget<TwitchWidget>;
-
     const command = 'twitch:open';
 
     app.commands.addCommand(command, {
       label: 'Twitch',
       execute: async () => {
+        let widget: MainAreaWidget<TwitchWidget>;
         if (!widget) {
           const result = await InputDialog.getText({
             title: 'Channel',
