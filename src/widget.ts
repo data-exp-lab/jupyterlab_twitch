@@ -50,7 +50,10 @@ export class TwitchPlayerView extends DOMWidgetView {
       width: this.model.get('width'),
       layout: 'video'
     };
-    this.embed = new Twitch.Embed(this.divId, params);
+    this.displayed.then(() => {
+      this.embed = new Twitch.Embed(this.divId, params);
+      this.player = this.embed.getPlayer();
+    });
 
     this.setupListeners();
   }

@@ -1,38 +1,83 @@
-import {
-    Application, IPlugin
-} from '@lumino/application';
+import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import {
-    Widget
-} from '@lumino/widgets';
+  JupyterFrontEnd,
+  JupyterFrontEndPlugin,
+  ILayoutRestorer
+} from '@jupyterlab/application';
 
 import {
-    IJupyterWidgetRegistry
-} from '@jupyter-widgets/base';
+  ICommandPalette,
+  MainAreaWidget,
+  WidgetTracker,
+  InputDialog
+} from '@jupyterlab/apputils';
 
-import * as widgytsExports from './widgyts';
+import * as widgetExports from './widget';
+import { TwitchPlayerWidget } from './player';
 
-import {
-    MODULE_NAME,
-    MODULE_VERSION
-} from './version';
-const EXTENSION_ID = MODULE_NAME + ":plugin";
-console.log("widgyts version " + MODULE_VERSION);
-console.log("widgyts module  " + MODULE_NAME);
+import { MODULE_NAME, MODULE_VERSION } from './version';
+const EXTENSION_ID = MODULE_NAME + ':plugin';
 
-const widgytsPlugin: IPlugin<Application<Widget>, void> = {
-    id: EXTENSION_ID,
-    requires: [IJupyterWidgetRegistry],
-    activate: activateWidgetExtension,
-    autoStart: true
-} as unknown as IPlugin<Application<Widget>, void>;
-
-export default widgytsPlugin;
-
-function activateWidgetExtension(app: Application<Widget>, registry: IJupyterWidgetRegistry): void {
+const extension: JupyterFrontEndPlugin<void> = {
+  id: EXTENSION_ID,
+  requires: [ICommandPalette, ILayoutRestorer, IJupyterWidgetRegistry],
+  autoStart: true,
+  activate: async (
+    app: JupyterFrontEnd,
+    palette: ICommandPalette,
+    restorer: ILayoutRestorer,
+    registry: IJupyterWidgetRegistry
+  ) => {
+    console.log('JupyterLab extension jupyterlab-twitch is activated!');
     registry.registerWidget({
-        name: MODULE_NAME,
-        version: MODULE_VERSION,
-        exports: widgytsExports,
+      name: MODULE_NAME,
+      version: MODULE_VERSION,
+      exports: widgetExports
     });
-}
+
+    const command = 'twitch:open';
+
+    app.commands.addCommand(command, {
+      label: 'Twitch',
+      execute: async () => {
+        let widget: MainAreaWidget<TwitchPlayerWidget>;
+        if (!widget) {
+          const result = await InputDialog.getText({
+            title: 'Channel',
+            text: 'mst3k'
+          });
+          if (!result.button.accept) {
+            return;
+          }
+          const content = new TwitchPlayerWidget(result.value);
+          widget = new MainAreaWidget({ content });
+          widget.id = 'twitch-jupyterlab';
+          widget.title.label = 'Twitch: #' + content.channel;
+          widget.title.closable = true;
+        }
+        if (!tracker.has(widget)) {
+          tracker.add(widget);
+        }
+        if (!widget.isAttached) {
+          app.shell.add(widget, 'main');
+        }
+        widget.content.update();
+
+        app.shell.activateById(widget.id);
+      }
+    });
+
+    palette.addItem({ command, category: 'Twitch' });
+
+    const tracker = new WidgetTracker<MainAreaWidget<TwitchPlayerWidget>>({
+      namespace: 'twitch'
+    });
+    restorer.restore(tracker, {
+      command,
+      name: () => 'twitch'
+    });
+  }
+};
+
+export default extension;
