@@ -7,9 +7,9 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/matthewturk/jupyterlab_twitch",
+  "homepage": "https://github.com/data-exp-lab/jupyterlab_twitch",
   "bugs": {
-    "url": "https://github.com/matthewturk/jupyterlab_twitch/issues"
+    "url": "https://github.com/data-exp-lab/jupyterlab_twitch/issues"
   },
   "license": "BSD-3-Clause",
   "author": "Matthew Turk",
@@ -22,7 +22,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/matthewturk/jupyterlab_twitch.git"
+    "url": "https://github.com/data-exp-lab/jupyterlab_twitch.git"
   },
   "scripts": {
     "build": "tsc",

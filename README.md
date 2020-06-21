@@ -1,6 +1,6 @@
 # jupyterlab_twitch
 
-![Github Actions Status](https://github.com/matthewturk/jupyterlab_twitch/workflows/Build/badge.svg)
+![Github Actions Status](https://github.com/data-exp-lab/jupyterlab_twitch/workflows/Build/badge.svg)
 
 A JupyterLab extension to display Twitch inline.  It provides both a Twitch widget that can be displayed and modified via code, and a standalone Twitch player.
 
