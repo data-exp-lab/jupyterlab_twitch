@@ -6,8 +6,6 @@ A JupyterLab extension to display Twitch inline.  It provides both a Twitch widg
 
 The goals of the project are to build out a method that allows for students to watch live streaming coding sessions and interact with an instructor from within their Jupyerlab.  At present, it allows for embedding chat and video, but future developments will include deeper integration with chat using [twitch-js](https://github.com/twitch-js/twitch-js/).
 
-
-
 ## Requirements
 
 * JupyterLab >= 2.0
@@ -17,6 +15,24 @@ The goals of the project are to build out a method that allows for students to w
 ```bash
 jupyter labextension install jupyterlab-twitch
 ```
+
+## Usage
+
+You can either use the "Twitch" option in the command palette, which will prompt you for a Channel, or you can import and use the Twitch widget.  Using the Twitch widget is preferred for most things, but it is also somewhat harder to move around.
+
+```python
+import jupyterlab_twitch
+player = jupyterlab_twitch.TwitchPlayerModel()
+player.channel = "mst3k"
+player.volume = 0.9
+display(player)
+```
+
+Only a few attributes are exposed on the `TwitchPlayerModel`, and it will likely change its name as chat and other features are added.  Right now you can change the channel, the volume, and mute or unmute.  You can create a new output for the Twitch stream and drag that around, and you can also have multiple going.
+
+This uses the IFrame embedding library, so may not work on non-localhost domains.
+
+Style for the widget-based viewer is still a bit clunky, and will be worked on in subsequent versions.
 
 ## Contributing
 
