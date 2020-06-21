@@ -6,15 +6,17 @@ import { MODULE_NAME, MODULE_VERSION } from './version';
 import * as Twitch from './twitch-embed.js';
 
 export class TwitchPlayerModel extends DOMWidgetModel {
-  defaults() {
+  defaults(): any {
     return {
       ...super.defaults(),
+      /* eslint-disable */
       _model_name: TwitchPlayerModel.model_name,
       _model_module: TwitchPlayerModel.model_module,
       _model_module_version: TwitchPlayerModel.model_module_version,
       _view_name: TwitchPlayerModel.view_name,
       _view_module: TwitchPlayerModel.view_module,
       _view_module_version: TwitchPlayerModel.view_module_version,
+      /* eslint-enable */
       channel: 'mst3k',
       width: 500,
       height: 500,

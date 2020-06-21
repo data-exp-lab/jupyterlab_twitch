@@ -1,4 +1,6 @@
+/* eslint-disable */
 const data = require('../package.json');
+/* eslint-enable */
 
 /* As seen in the ipycanvas repository */
 
