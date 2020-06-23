@@ -13,7 +13,7 @@ The goals of the project are to build out a method that allows for students to w
 ## Install
 
 ```bash
-jupyter labextension install jupyterlab-twitch
+jupyter labextension install @data-exp-lab/jupyterlab-twitch
 ```
 
 ## Usage
@@ -71,5 +71,5 @@ jupyter lab --watch
 
 ```bash
 
-jupyter labextension uninstall jupyterlab-twitch
+jupyter labextension uninstall @data-exp-lab/jupyterlab-twitch
 ```

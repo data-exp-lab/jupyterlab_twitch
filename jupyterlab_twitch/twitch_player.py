@@ -14,7 +14,7 @@ class TwitchPlayerModel(ipywidgets.DOMWidget):
     _view_module_version = traitlets.Unicode(EXTENSION_VERSION).tag(sync=True)
 
     channel = traitlets.Unicode("mst3k").tag(sync=True)
-    width = traitlets.CInt(500).tag(sync=True)
-    height = traitlets.CInt(500).tag(sync=True)
+    width = traitlets.Union([traitlets.CInt(500), traitlets.Unicode()]).tag(sync=True)
+    height = traitlets.Union([traitlets.CInt(500), traitlets.Unicode()]).tag(sync=True)
     volume = traitlets.CFloat(0.2).tag(sync=True)
     muted = traitlets.Bool(False).tag(sync=True)

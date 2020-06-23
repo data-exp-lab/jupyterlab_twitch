@@ -26,8 +26,8 @@ export class TwitchPlayerModel extends DOMWidgetModel {
   }
 
   channel: string;
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
   volume: number;
   muted: boolean;
 
