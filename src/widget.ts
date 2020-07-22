@@ -21,7 +21,7 @@ export class TwitchPlayerModel extends DOMWidgetModel {
       width: 500,
       height: 500,
       volume: 0.2,
-      muted: false
+      muted: false,
     };
   }
 
@@ -50,7 +50,7 @@ export class TwitchPlayerView extends DOMWidgetView {
       channel: this.model.get('channel'),
       height: this.model.get('height'),
       width: this.model.get('width'),
-      layout: 'video'
+      layout: 'video',
     };
     this.displayed.then(() => {
       this.embed = new Twitch.Embed(this.divId, params);
