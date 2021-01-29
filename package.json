@@ -39,7 +39,7 @@
   "dependencies": {
     "@jupyter-widgets/base": "^3.0.0",
     "@jupyterlab/application": "^2.0.0",
-    "@jupyterlab/apputils": "^2.1.1",
+    "@jupyterlab/apputils": "^3.0.3",
     "@lumino/coreutils": "^1.5.0",
     "@lumino/widgets": "^1.13.0",
     "@types/node": "^14.0.13"
