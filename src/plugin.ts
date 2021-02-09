@@ -1,10 +1,9 @@
-import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
-
 import {
-  JupyterFrontEnd,
   JupyterFrontEndPlugin,
-  ILayoutRestorer,
+  JupyterFrontEnd
 } from '@jupyterlab/application';
+
+import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 
 import {
   ICommandPalette,
@@ -20,7 +19,7 @@ const EXTENSION_ID = MODULE_NAME + ':plugin';
 
 const extension: JupyterFrontEndPlugin<void> = {
   id: EXTENSION_ID,
-  requires: [ICommandPalette, ILayoutRestorer, IJupyterWidgetRegistry],
+  requires: [ICommandPalette, IJupyterWidgetRegistry],
   autoStart: true,
   activate: async (
     app: JupyterFrontEnd,
