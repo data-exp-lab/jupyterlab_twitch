@@ -4,6 +4,8 @@ from pathlib import Path
 
 from ._version import __version__
 
+from .twitch_player import TwitchPlayerModel
+
 HERE = Path(__file__).parent.resolve()
 
 with (HERE / "labextension" / "package.json").open() as fid:
