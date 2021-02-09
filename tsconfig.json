@@ -18,8 +18,9 @@
     "strict": true,
     "strictNullChecks": false,
     "target": "es2017",
-    "allowJs": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"],
+    "allowJs": true
   },
   "include": ["src/*"]
 }

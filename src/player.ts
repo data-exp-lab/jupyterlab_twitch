@@ -23,7 +23,7 @@ export class TwitchPlayerWidget extends Widget {
         channel: this.channel,
         height: '100%',
         width: '100%',
-        layout: 'video-with-chat',
+        layout: 'video-with-chat'
       };
 
       this.embed = new Twitch.Embed('twitch-embed', params);

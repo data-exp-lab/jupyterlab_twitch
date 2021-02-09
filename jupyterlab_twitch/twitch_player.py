@@ -2,7 +2,8 @@ import ipywidgets as ipywidgets
 import traitlets
 from ipywidgets import widget_serialization
 
-from ._version import EXTENSION_VERSION
+from ._version import __version__
+EXTENSION_VERSION = "~" + __version__
 
 @ipywidgets.register
 class TwitchPlayerModel(ipywidgets.DOMWidget):
