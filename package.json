@@ -15,7 +15,8 @@
   "author": "Matthew Turk",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
-    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
+    "style/index.js"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -25,39 +26,51 @@
     "url": "https://github.com/data-exp-lab/jupyterlab_twitch.git"
   },
   "scripts": {
-    "build": "tsc",
-    "build:lib": "tsc",
+    "build": "jlpm run build:lib && jlpm run build:labextension:dev",
     "build:all": "jlpm run build:lib",
+    "build:labextension": "jupyter labextension build .",
+    "build:labextension:dev": "jupyter labextension build --development True .",
+    "build:lib": "tsc",
+    "build:prod": "jlpm run build:lib && jlpm run build:labextension",
     "clean": "jlpm run clean:lib",
+    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
+    "clean:labextension": "rimraf jupyterlab_twitch/labextension",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
-    "clean:all": "jlpm run clean:lib",
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
-    "prepare": "jlpm run clean && jlpm run build",
-    "watch": "tsc -w"
+    "install:extension": "jupyter labextension develop --overwrite .",
+    "prepare": "jlpm run clean && jlpm run build:prod",
+    "watch": "run-p watch:src watch:labextension",
+    "watch:labextension": "jupyter labextension watch .",
+    "watch:src": "tsc -w"
   },
   "dependencies": {
     "@jupyter-widgets/base": "^3.0.0",
-    "@jupyterlab/application": "^2.0.0",
-    "@jupyterlab/apputils": "^2.1.1",
-    "@lumino/coreutils": "^1.5.0",
-    "@lumino/widgets": "^1.13.0",
+    "@jupyterlab/application": "^3.0.4",
+    "@jupyterlab/apputils": "^3.0.3",
+    "@lumino/coreutils": "^1.5.3",
+    "@lumino/widgets": "^1.16.1",
     "@types/node": "^14.0.13"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.0.0",
-    "@typescript-eslint/parser": "^3.7.0",
-    "eslint": "^7.5.0",
-    "eslint-config-prettier": "^7.0.0",
-    "eslint-plugin-prettier": "^3.1.2",
-    "prettier": "2.2.1",
+    "@jupyterlab/builder": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
-    "typescript": "~4.1.2"
+    "typescript": "~4.1.3"
   },
   "sideEffects": [
-    "style/*.css"
+    "style/*.css",
+    "style/index.js"
   ],
   "jupyterlab": {
-    "extension": "lib/plugin"
-  }
+    "extension": "lib/plugin",
+    "outputDir": "jupyterlab_twitch/labextension"
+  },
+  "styleModule": "style/index.js"
 }
