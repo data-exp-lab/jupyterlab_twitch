@@ -8,7 +8,7 @@ import { IJupyterWidgetRegistry } from '@jupyter-widgets/base';
 import {
   ICommandPalette,
   MainAreaWidget,
-  InputDialog,
+  InputDialog
 } from '@jupyterlab/apputils';
 
 import * as widgetExports from './widget';
@@ -30,7 +30,7 @@ const extension: JupyterFrontEndPlugin<void> = {
     registry.registerWidget({
       name: MODULE_NAME,
       version: MODULE_VERSION,
-      exports: widgetExports,
+      exports: widgetExports
     });
 
     const command = 'twitch:open';
@@ -42,7 +42,7 @@ const extension: JupyterFrontEndPlugin<void> = {
         if (!widget) {
           const result = await InputDialog.getText({
             title: 'Channel',
-            text: 'mst3k',
+            text: 'mst3k'
           });
           if (!result.button.accept) {
             return;
@@ -59,11 +59,11 @@ const extension: JupyterFrontEndPlugin<void> = {
         widget.content.update();
 
         app.shell.activateById(widget.id);
-      },
+      }
     });
 
     palette.addItem({ command, category: 'Twitch' });
-  },
+  }
 };
 
 export default extension;
