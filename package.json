@@ -51,7 +51,7 @@
     "@jupyterlab/mainmenu": "^3.0.3",
     "@jupyterlab/services": "^6.0.3",
     "@jupyterlab/apputils": "^3.0.0",
-    "@types/node": "^15.0.3"
+    "@types/node": "^16.3.1"
   },
   "devDependencies": {
     "@jupyterlab/builder": "^3.0.0",
