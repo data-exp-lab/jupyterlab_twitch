@@ -15,8 +15,7 @@
   "author": "Matthew Turk",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
-    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}",
-    "style/index.js"
+    "style/**/*.{css,js,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
   ],
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -34,7 +33,7 @@
     "clean": "jlpm clean:lib",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
     "clean:lintcache": "rimraf .eslintcache .stylelintcache",
-    "clean:labextension": "rimraf {{ cookiecutter.python_name }}/labextension",
+    "clean:labextension": "rimraf jupyterlab_twitch/labextension",
     "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
     "eslint": "jlpm eslint:check --fix",
     "eslint:check": "eslint . --cache --ext .ts,.tsx",
@@ -51,13 +50,7 @@
     "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
-    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4",
-    "@jupyterlab/application": "^3.0.4",
-    "@jupyterlab/coreutils": "^5.0.2",
-    "@jupyterlab/mainmenu": "^3.0.3",
-    "@jupyterlab/services": "^6.0.3",
-    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4",
-    "@jupyterlab/apputils": "^3.0.0",
+    "@jupyterlab/application": "^3.1.0",
     "@types/node": "^17.0.34"
   },
   "devDependencies": {
@@ -70,6 +63,7 @@
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
+    "stylelint": "^14.3.0",
     "stylelint-config-prettier": "^9.0.3",
     "stylelint-config-recommended": "^6.0.0",
     "stylelint-config-standard": "~24.0.0",
@@ -80,16 +74,23 @@
     "style/*.css",
     "style/index.js"
   ],
-  "jupyterlab": {
-    "extension": "lib/plugin",
-    "outputDir": "jupyterlab_twitch/labextension",
-    "webpackConfig": "./webpack.config.js",
-    "sharedPackages": {
-      "@jupyter-widgets/base": {
-        "bundled": false,
-        "singleton": true
-      }
-    }
+  "styleModule": "style/index.js",
+  "publishConfig": {
+    "access": "public"
   },
-  "styleModule": "style/index.js"
+  "jupyterlab": {
+    "extension": true,
+    "outputDir": "jupyterlab_twitch/labextension"
+  },
+  "jupyter-releaser": {
+    "hooks": {
+      "before-build-npm": [
+        "python -m pip install jupyterlab~=3.1",
+        "jlpm"
+      ],
+      "before-build-python": [
+        "jlpm clean:all"
+      ]
+    }
+  }
 }
