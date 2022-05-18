@@ -26,23 +26,29 @@
     "url": "https://github.com/data-exp-lab/jupyterlab_twitch.git"
   },
   "scripts": {
-    "build": "jlpm run build:lib && jlpm run build:labextension:dev",
-    "build:all": "jlpm run build:lib",
+    "build": "jlpm build:lib && jlpm build:labextension:dev",
+    "build:prod": "jlpm clean && jlpm build:lib && jlpm build:labextension",
     "build:labextension": "jupyter labextension build .",
     "build:labextension:dev": "jupyter labextension build --development True .",
     "build:lib": "tsc",
-    "build:prod": "jlpm run build:lib && jlpm run build:labextension",
-    "clean": "jlpm run clean:lib",
-    "clean:all": "jlpm run clean:lib && jlpm run clean:labextension",
-    "clean:labextension": "rimraf jupyterlab_twitch/labextension",
+    "clean": "jlpm clean:lib",
     "clean:lib": "rimraf lib tsconfig.tsbuildinfo",
-    "eslint": "eslint . --ext .ts,.tsx --fix",
-    "eslint:check": "eslint . --ext .ts,.tsx",
-    "install:extension": "jupyter labextension develop --overwrite .",
-    "prepare": "jlpm run clean && jlpm run build:prod",
+    "clean:lintcache": "rimraf .eslintcache .stylelintcache",
+    "clean:labextension": "rimraf {{ cookiecutter.python_name }}/labextension",
+    "clean:all": "jlpm clean:lib && jlpm clean:labextension && jlpm clean:lintcache",
+    "eslint": "jlpm eslint:check --fix",
+    "eslint:check": "eslint . --cache --ext .ts,.tsx",
+    "install:extension": "jlpm build",
+    "lint": "jlpm stylelint && jlpm prettier && jlpm eslint",
+    "lint:check": "jlpm stylelint:check && jlpm prettier:check && jlpm eslint:check",
+    "prettier": "jlpm prettier:base --write --list-different",
+    "prettier:base": "prettier \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+    "prettier:check": "jlpm prettier:base --check",
+    "stylelint": "jlpm stylelint:check --fix",
+    "stylelint:check": "stylelint --cache \"style/**/*.css\"",
     "watch": "run-p watch:src watch:labextension",
-    "watch:labextension": "jupyter labextension watch .",
-    "watch:src": "tsc -w"
+    "watch:src": "tsc -w",
+    "watch:labextension": "jupyter labextension watch ."
   },
   "dependencies": {
     "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4",
@@ -50,19 +56,24 @@
     "@jupyterlab/coreutils": "^5.0.2",
     "@jupyterlab/mainmenu": "^3.0.3",
     "@jupyterlab/services": "^6.0.3",
+    "@jupyter-widgets/base": "^1.1.10 || ^2 || ^3 || ^4",
     "@jupyterlab/apputils": "^3.0.0",
     "@types/node": "^17.0.34"
   },
   "devDependencies": {
-    "@jupyterlab/builder": "^3.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.0.0",
-    "@typescript-eslint/parser": "^5.25.0",
-    "eslint": "^8.0.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-prettier": "^4.0.0",
+    "@jupyterlab/builder": "^3.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.8.1",
+    "@typescript-eslint/parser": "^4.8.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.1",
     "rimraf": "^3.0.2",
+    "stylelint-config-prettier": "^9.0.3",
+    "stylelint-config-recommended": "^6.0.0",
+    "stylelint-config-standard": "~24.0.0",
+    "stylelint-prettier": "^2.0.0",
     "typescript": "~4.6.4"
   },
   "sideEffects": [
@@ -71,7 +82,14 @@
   ],
   "jupyterlab": {
     "extension": "lib/plugin",
-    "outputDir": "jupyterlab_twitch/labextension"
+    "outputDir": "jupyterlab_twitch/labextension",
+    "webpackConfig": "./webpack.config.js",
+    "sharedPackages": {
+      "@jupyter-widgets/base": {
+        "bundled": false,
+        "singleton": true
+      }
+    }
   },
   "styleModule": "style/index.js"
 }
